@@ -43,17 +43,19 @@ namespace BottomBar.Droid.Renderers
 		FrameLayout _frameLayout;
 		IPageController _pageController;
 	    IDictionary<Page, BottomBarBadge> _badges;
+        Android.Content.Context _context;
 
-		public BottomBarPageRenderer ()
-		{
+        public BottomBarPageRenderer (Android.Content.Context context) : base(context)
+        {
 			AutoPackage = false;
-		}
+            _context = context;
+        }
 
 		#region IOnTabClickListener
 		public virtual void OnTabSelected (int position)
 		{
 			//Do we need this call? It's also done in OnElementPropertyChanged
-			SwitchContent(Element.Children [position]);
+			//SwitchContent(Element.Children [position]);
 			var bottomBarPage = Element as BottomBarPage;
 			bottomBarPage.CurrentPage = Element.Children[position];
 			//bottomBarPage.RaiseCurrentPageChanged();
@@ -75,7 +77,7 @@ namespace BottomBar.Droid.Renderers
 					IVisualElementRenderer pageRenderer = Platform.GetRenderer (pageToRemove);
 
 					if (pageRenderer != null) {
-						pageRenderer.ViewGroup.RemoveFromParent ();
+						pageRenderer.View.RemoveFromParent ();
 						pageRenderer.Dispose ();
 					}
 
@@ -132,10 +134,12 @@ namespace BottomBar.Droid.Renderers
 				if (_bottomBar == null) {
 					_pageController = PageController.Create (bottomBarPage);
 
-					// create a view which will act as container for Page's
-					_frameLayout = new FrameLayout (Forms.Context);
-					_frameLayout.LayoutParameters = new FrameLayout.LayoutParams (LayoutParams.MatchParent, LayoutParams.MatchParent, GravityFlags.Fill);
-					AddView (_frameLayout, 0);
+                    // create a view which will act as container for Page's
+                    _frameLayout = new FrameLayout(_context)
+                    {
+                        LayoutParameters = new FrameLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent, GravityFlags.Fill)
+                    };
+                    AddView (_frameLayout, 0);
 
 					// create bottomBar control
 					_bottomBar = BottomNavigationBar.BottomBar.Attach (_frameLayout, null);
@@ -197,10 +201,10 @@ namespace BottomBar.Droid.Renderers
 			}
 
 			if (Platform.GetRenderer (view) == null) {
-				Platform.SetRenderer (view, Platform.CreateRenderer (view));
+				Platform.SetRenderer (view, Platform.CreateRendererWithContext (view, _context));
 			}
 
-			_frameLayout.AddView (Platform.GetRenderer (view).ViewGroup);
+			_frameLayout.AddView (Platform.GetRenderer (view).View);
 		}
 
 		protected override void OnLayout (bool changed, int l, int t, int r, int b)

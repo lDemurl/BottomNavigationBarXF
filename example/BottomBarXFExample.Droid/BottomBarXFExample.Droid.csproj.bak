@@ -4,12 +4,12 @@
     <AndroidSdkBuildToolsVersion>23.0.3</AndroidSdkBuildToolsVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C5BC9521-E9B9-44E3-A505-256080B78234}</ProjectGuid>
+    <ProjectGuid>{03FE6BCA-AA3B-4689-A829-DB87D51A149E}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>BottomBarXFExampleXaml.Droid</RootNamespace>
-    <AssemblyName>BottomBarXFExampleXaml.Droid</AssemblyName>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <RootNamespace>BottomBarXFExample.Droid</RootNamespace>
+    <AssemblyName>BottomBarXFExample.Droid</AssemblyName>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -91,6 +91,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BottomBarXFExample\BottomBarXFExample.csproj">
+      <Project>{821A7B88-A9CD-4CCA-B32B-CEE8DCF49738}</Project>
+      <Name>BottomBarXFExample</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BottomBar.Droid\BottomBar.Droid.csproj">
       <Project>{96746A3E-074D-40C6-B2E2-CA90313012C6}</Project>
       <Name>BottomBar.Droid</Name>
@@ -98,10 +102,6 @@
     <ProjectReference Include="..\..\BottomBar.XamarinForms\BottomBar.XamarinForms.csproj">
       <Project>{BB1D801D-5EC3-471D-B9EA-98C48D785BAA}</Project>
       <Name>BottomBar.XamarinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BottomBarXFExampleXaml\BottomBarXFExampleXaml.csproj">
-      <Project>{d72b487f-aa32-45b3-92b1-c36bc5659cbf}</Project>
-      <Name>BottomBarXFExampleXaml</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
