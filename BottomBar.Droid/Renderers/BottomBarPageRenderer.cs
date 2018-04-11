@@ -284,7 +284,12 @@ namespace BottomBar.Droid.Renderers
 		{
 			BottomBarTab [] tabs = Element.Children.Select (page => {
 				var tabIconId = ResourceManagerEx.IdFromTitle (page.Icon, ResourceManager.DrawableClass);
-				return new BottomBarTab (tabIconId, page.Title);
+
+                var bottomBarTab = new BottomBarTab(tabIconId, page.Title);
+                TextView title = (TextView)FindViewById(tabIconId);
+                title.SetTextSize(Android.Util.ComplexUnitType.Sp, 10);
+                
+                return bottomBarTab;
 			}).ToArray ();
 
 		    if (tabs.Length > 0)
