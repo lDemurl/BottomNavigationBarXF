@@ -287,8 +287,6 @@ namespace BottomBar.Droid.Renderers
 				var tabIconId = ResourceManagerEx.IdFromTitle (page.Icon, ResourceManager.DrawableClass);
 
                 var bottomBarTab = new BottomBarTab(tabIconId, page.Title);
-                TextView title = (TextView)FindViewById(tabIconId);
-                title.SetTextSize(Android.Util.ComplexUnitType.Sp, 10);
                 
                 return bottomBarTab;
 			}).ToArray ();
