@@ -19,17 +19,40 @@ using Xamarin.Forms;
 
 namespace BottomBar.XamarinForms
 {
-	public class BottomBarPage : TabbedPage
-	{
-		public enum BarThemeTypes { Light, DarkWithAlpha, DarkWithoutAlpha }
+    public class BottomBarPage : TabbedPage
+    {
+        public enum BarThemeTypes { Light, DarkWithAlpha, DarkWithoutAlpha }
 
-		public bool FixedMode { get; set; }
-		public BarThemeTypes BarTheme { get; set; }
+        public bool FixedMode { get; set; }
+        public BarThemeTypes BarTheme { get; set; }
+        public delegate void OnTabReSelectedHandler(object sender, TabReselectedEventArgs args);
 
-		public void RaiseCurrentPageChanged()
-		{
-			OnCurrentPageChanged();
-		}
-	}
+        static OnTabReSelectedHandler _onTabReSelected;
+        public event OnTabReSelectedHandler OnTabReSelected
+        {
+            add => _onTabReSelected += value;
+            remove => _onTabReSelected -= value;
+        }
+
+        public void RaiseCurrentPageChanged()
+        {
+            OnCurrentPageChanged();
+        }
+
+        public static void RegisterReSelectedTab(object sender, int currentIndex)
+        {
+            _onTabReSelected?.Invoke(sender, new TabReselectedEventArgs(currentIndex));
+        }
+
+    }
+
+    public class TabReselectedEventArgs : EventArgs
+    {
+        public int ReSelectedIndex { get; set; }
+        public TabReselectedEventArgs(int reSelectedIndex)
+        {
+            ReSelectedIndex = reSelectedIndex;
+        }
+    }
 }
 
