@@ -134,57 +134,62 @@ namespace BottomBar.Droid.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e.NewElement != null)
+            try
             {
 
-                BottomBarPage bottomBarPage = e.NewElement;
-
-                if (_bottomBar == null)
+                if (e.NewElement != null)
                 {
-                    _pageController = PageController.Create(bottomBarPage);
 
-                    // create a view which will act as container for Page's
-                    _frameLayout = new FrameLayout(_context)
-                    {
-                        LayoutParameters = new FrameLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent, GravityFlags.Fill)
-                    };
-                    AddView(_frameLayout, 0);
+                    BottomBarPage bottomBarPage = e.NewElement;
 
-                    // create bottomBar control
-                    _bottomBar = BottomNavigationBar.BottomBar.Attach(_frameLayout, null);
-                    _bottomBar.SetTextAppearance(Resource.Style.BottomBarTitle);
-                    _bottomBar.NoTabletGoodness();
-                    if (bottomBarPage.FixedMode)
+                    if (_bottomBar == null)
                     {
-                        _bottomBar.UseFixedMode();
+                        _pageController = PageController.Create(bottomBarPage);
+
+                        // create a view which will act as container for Page's
+                        _frameLayout = new FrameLayout(_context)
+                        {
+                            LayoutParameters = new FrameLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent, GravityFlags.Fill)
+                        };
+                        AddView(_frameLayout, 0);
+
+                        // create bottomBar control
+                        _bottomBar = BottomNavigationBar.BottomBar.Attach(_frameLayout, null);
+                        _bottomBar.SetTextAppearance(Resource.Style.BottomBarTitle);
+                        _bottomBar.NoTabletGoodness();
+                        if (bottomBarPage.FixedMode)
+                        {
+                            _bottomBar.UseFixedMode();
+                        }
+
+                        switch (bottomBarPage.BarTheme)
+                        {
+                            case BottomBarPage.BarThemeTypes.Light:
+                                break;
+                            case BottomBarPage.BarThemeTypes.DarkWithAlpha:
+                                _bottomBar.UseDarkThemeWithAlpha(true);
+                                break;
+                            case BottomBarPage.BarThemeTypes.DarkWithoutAlpha:
+                                _bottomBar.UseDarkThemeWithAlpha(false);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        _bottomBar.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+                        _bottomBar.SetOnTabClickListener(this);
+
+                        UpdateTabs();
+                        UpdateBarBackgroundColor();
+                        UpdateBarTextColor();
                     }
 
-                    switch (bottomBarPage.BarTheme)
+                    if (bottomBarPage.CurrentPage != null)
                     {
-                        case BottomBarPage.BarThemeTypes.Light:
-                            break;
-                        case BottomBarPage.BarThemeTypes.DarkWithAlpha:
-                            _bottomBar.UseDarkThemeWithAlpha(true);
-                            break;
-                        case BottomBarPage.BarThemeTypes.DarkWithoutAlpha:
-                            _bottomBar.UseDarkThemeWithAlpha(false);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        SwitchContent(bottomBarPage.CurrentPage);
                     }
-                    _bottomBar.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
-                    _bottomBar.SetOnTabClickListener(this);
-
-                    UpdateTabs();
-                    UpdateBarBackgroundColor();
-                    UpdateBarTextColor();
-                }
-
-                if (bottomBarPage.CurrentPage != null)
-                {
-                    SwitchContent(bottomBarPage.CurrentPage);
                 }
             }
+            catch (Exception) { }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
