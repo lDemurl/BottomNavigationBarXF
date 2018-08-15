@@ -44,6 +44,7 @@ namespace BottomBar.Droid.Renderers
         IPageController _pageController;
         IDictionary<Page, BottomBarBadge> _badges;
         Android.Content.Context _context;
+        private int _currentPosition = 0;
 
         public BottomBarPageRenderer(Android.Content.Context context) : base(context)
         {
@@ -64,7 +65,10 @@ namespace BottomBar.Droid.Renderers
         public virtual void OnTabReSelected(int position)
         {
             var bottomBarPage = Element as BottomBarPage;
-            BottomBarPage.RegisterReSelectedTab(bottomBarPage, position);
+            if (_currentPosition == position)
+                BottomBarPage.RegisterReSelectedTab(bottomBarPage, position);
+            else
+                _currentPosition = position;
         }
         #endregion
 
