@@ -236,38 +236,45 @@ namespace BottomBar.Droid.Renderers
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
-            int width = r - l;
-            int height = b - t;
-
-            var context = Context;
-
-            _bottomBar.Measure(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(height, MeasureSpecMode.AtMost));
-            int tabsHeight = Math.Min(height, Math.Max(_bottomBar.MeasuredHeight, _bottomBar.MinimumHeight));
-
-            if (width > 0 && height > 0)
+            try
             {
-                _pageController.ContainerArea = new Rectangle(0, 0, context.FromPixels(width), context.FromPixels(_frameLayout.MeasuredHeight));
-                ObservableCollection<Element> internalChildren = _pageController.InternalChildren;
+                int width = r - l;
+                int height = b - t;
 
-                for (var i = 0; i < internalChildren.Count; i++)
+                var context = Context;
+
+                _bottomBar.Measure(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(height, MeasureSpecMode.AtMost));
+                int tabsHeight = Math.Min(height, Math.Max(_bottomBar.MeasuredHeight, _bottomBar.MinimumHeight));
+
+                if (width > 0 && height > 0)
                 {
-                    var child = internalChildren[i] as VisualElement;
+                    _pageController.ContainerArea = new Rectangle(0, 0, context.FromPixels(width), context.FromPixels(_frameLayout.MeasuredHeight));
+                    ObservableCollection<Element> internalChildren = _pageController.InternalChildren;
 
-                    if (child == null)
+                    for (var i = 0; i < internalChildren.Count; i++)
                     {
-                        continue;
+                        var child = internalChildren[i] as VisualElement;
+
+                        if (child == null)
+                        {
+                            continue;
+                        }
+
+                        IVisualElementRenderer renderer = Platform.GetRenderer(child);
+                        var navigationRenderer = renderer as NavigationPageRenderer;
+                        if (navigationRenderer != null)
+                        {
+                            // navigationRenderer.ContainerPadding = tabsHeight;
+                        }
                     }
 
-                    IVisualElementRenderer renderer = Platform.GetRenderer(child);
-                    var navigationRenderer = renderer as NavigationPageRenderer;
-                    if (navigationRenderer != null)
-                    {
-                        // navigationRenderer.ContainerPadding = tabsHeight;
-                    }
+                    _bottomBar.Measure(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(tabsHeight, MeasureSpecMode.Exactly));
+                    _bottomBar.Layout(0, 0, width, tabsHeight);
                 }
+            }
+            catch (Exception ex)
+            {
 
-                _bottomBar.Measure(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(tabsHeight, MeasureSpecMode.Exactly));
-                _bottomBar.Layout(0, 0, width, tabsHeight);
             }
 
             base.OnLayout(changed, l, t, r, b);
