@@ -272,7 +272,7 @@ namespace BottomBar.Droid.Renderers
                     _bottomBar.Layout(0, 0, width, tabsHeight);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
